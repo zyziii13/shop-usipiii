@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Usipiii - Stitch & Snack</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Font: Outfit & Quicksand -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+    <script>
+        // Konfigurasi warna kustom pastel persis sesuai screenshot referensi
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        softPink: '#FFB5E8',   /* Pink pastel dari gambar */
+                        softBlue: '#B2F9FF',   /* Biru pastel dari gambar */
+                        softYellow: '#FFF5BA', /* Kuning pastel dari gambar */
+                        creamBg: '#FAF6EE',    /* Background krem luar */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-creamBg text-gray-800 antialiased selection:bg-softPink selection:text-gray-900">
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 bg-creamBg/90 backdrop-blur-md border-b border-gray-200/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-softPink flex items-center justify-center text-xl shadow-xs">
+                    🛍️
+                </div>
+                <div>
+                    <span class="font-heading font-bold text-xl tracking-tight text-pink-600">Shop Usipiii</span>
+<span class="block text-xs font-semibold text-pink-500 tracking-wider uppercase">Stitch & Snack</span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+<nav class="hidden md:flex items-center gap-8 font-medium">
+    <a href="#home" class="text-pink-600 hover:text-pink-700 transition">Beranda</a>
+    <a href="#stitch" class="text-pink-600 hover:text-pink-700 transition">Stitch (Baju)</a>
+    <a href="#snack" class="text-pink-600 hover:text-pink-700 transition">Snack (Makanan)</a>
+    <a href="#about" class="text-pink-600 hover:text-pink-700 transition">Tentang Kami</a>
+</nav>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-4">
+                <button onclick="openCartModal()" class="relative p-2.5 rounded-full bg-white hover:bg-gray-100 shadow-xs transition border border-gray-200">
+                    <i class="fa-solid fa-cart-shopping text-gray-700"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">0</span>
+                </button>
+                <a href="#catalog" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-pink-600 hover:bg-pink-700 text-white font-bold text-sm shadow-xs transition transform hover:-translate-y-0.5">
+                    Pesan Sekarang
+                </a>
+                <!-- Mobile Menu Button -->
+                <button id="menu-btn" class="md:hidden p-2.5 rounded-full bg-white border border-gray-200 text-gray-700">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 px-6 py-4 space-y-3 shadow-lg">
+            <a href="#home" class="block font-medium text-gray-700 hover:text-pink-600">Beranda</a>
+            <a href="#stitch" class="block font-medium text-gray-700 hover:text-pink-600">Stitch (Baju)</a>
+            <a href="#snack" class="block font-medium text-gray-700 hover:text-pink-600">Snack (Makanan)</a>
+            <a href="#about" class="block font-medium text-gray-700 hover:text-pink-600">Tentang Kami</a>
+        </div>
+    
+    </header>
+    
+    <!-- ========================================== -->
+<!-- MODAL KERANJANG BELANJA -->
+<!-- ========================================== -->
+<div id="cart-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+        <!-- Header Modal -->
+        <div class="flex justify-between items-center mb-4 border-b pb-3 shrink-0">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">🛒</span>
+                <h3 class="font-heading font-bold text-lg text-gray-900">Keranjang Belanja</h3>
+            </div>
+            <button onclick="closeCartModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-lg transition">
+                &times;
+            </button>
+        </div>
+
+        <!-- List Item (Bisa di-scroll jika produknya banyak) -->
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-3 mb-4 pr-1">
+            <p class="text-gray-500 text-center py-4 text-sm">Keranjang masih kosong.</p>
+        </div>
+
+        <!-- Bagian Bawah (Total, Metode Pembayaran, Tombol) -->
+        <div class="border-t pt-4 space-y-3 shrink-0">
+            <!-- Total -->
+            <div class="flex justify-between items-center font-bold text-gray-900 text-sm">
+                <span>Total Keseluruhan:</span>
+                <span id="cart-total" class="text-pink-600">Rp 0</span>
+            </div>
+
+            <!-- PILIHAN METODE PEMBAYARAN -->
+            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-1.5">
+                <p class="text-xs font-bold text-gray-800">Pilih Metode Pembayaran:</p>
+                <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+                    <input type="radio" name="paymentMethod" value="whatsapp" checked>
+                    <span>Chat WhatsApp Langsung</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+                    <input type="radio" name="paymentMethod" value="bca">
+                    <span>Transfer BCA: <b>8535395370</b> (Selvi Sudianti)</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+                    <input type="radio" name="paymentMethod" value="seabank">
+                    <span>Transfer SeaBank: <b>901174614044</b> (Selvi Sudianti)</span>
+                </label>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <button onclick="checkoutWhatsApp()" class="w-full py-3 rounded-full bg-green-500 hover:bg-green-600 text-white font-bold text-center shadow-xs transition flex items-center justify-center gap-2 text-sm">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Checkout via WhatsApp
+            </button>
+            <button onclick="closeCartModal()" class="w-full py-2.5 rounded-full bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-center transition text-xs">
+                Lanjut Belanja
+            </button>
+        </div>
+    </div>
+</div>
+        
+
+
+    <!-- ========================================== -->
+    <!-- SCRIPT INTERAKSI & SISTEM KERANJANG -->
+    <!-- ========================================== -->
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Filter Catalog
+        function filterCategory(category) {
+            const cards = document.querySelectorAll('.product-card');
+            const btnAll = document.getElementById('btn-all');
+            const btnStitch = document.getElementById('btn-stitch');
+            const btnSnack = document.getElementById('btn-snack');
+
+            [btnAll, btnStitch, btnSnack].forEach(btn => {
+                if(btn) btn.className = "px-5 py-2 rounded-full font-bold text-sm bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition";
+            });
+
+            if(category === 'all') {
+                if(btnAll) btnAll.className = "px-5 py-2 rounded-full font-bold text-sm bg-gray-900 text-white shadow-xs transition";
+                cards.forEach(card => card.style.display = 'flex');
+            } else if(category === 'stitch') {
+                if(btnStitch) btnStitch.className = "px-5 py-2 rounded-full font-bold text-sm bg-gray-900 text-white shadow-xs transition";
+                cards.forEach(card => {
+                    card.style.display = card.getAttribute('data-category') === 'stitch' ? 'flex' : 'none';
+                });
+            } else if(category === 'snack') {
+                if(btnSnack) btnSnack.className = "px-5 py-2 rounded-full font-bold text-sm bg-gray-900 text-white shadow-xs transition";
+                cards.forEach(card => {
+                    card.style.display = card.getAttribute('data-category') === 'snack' ? 'flex' : 'none';
+                });
+            }
+        }
+
+        function filterCatalog(category) {
+            filterCategory(category);
+        }
+
+        // Shopping Cart Logic
+        let cart = [];
+
+        function openCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if(modal) modal.classList.remove('hidden');
+        }
+
+        function closeCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if(modal) modal.classList.add('hidden');
+        }
+
+        function addToCart(name, price, type) {
+            const existing = cart.find(item => item.name === name);
+            if(existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ name, price, qty: 1, type });
+            }
+            updateCartUI();
+            openCartModal();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if(badge) {
+                if(totalQty > 0) {
+                    badge.innerText = totalQty;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.innerText = '0';
+                    badge.classList.add('hidden');
+                }
+            }
+
+            if(container) {
+                if(cart.length === 0) {
+                    container.innerHTML = `<p class="text-gray-500 text-center py-8">Keranjang belanja kamu masih kosong.</p>`;
+                } else {
+                    container.innerHTML = cart.map((item, index) => `
+                        <div class="flex items-center justify-between bg-white p-3 rounded-2xl border border-gray-200 shadow-2xs mb-2">
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-900">${item.name}</h4>
+                                <p class="text-xs text-gray-500">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="changeQty(${index}, -1)" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold flex items-center justify-center">-</button>
+                                <span class="text-sm font-bold">${item.qty}</span>
+                                <button onclick="changeQty(${index}, 1)" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold flex items-center justify-center">+</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            if(totalEl) {
+                totalEl.innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            }
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if(cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function checkoutWhatsApp() {
+            if(cart.length === 0) {
+                alert('Keranjang belanja masih kosong!');
+                return;
+            }
+
+            let message = "Halo Shop Usipiii, saya ingin memesan produk berikut:\n\n";
+            cart.forEach((item, i) => {
+                message += `${i+1}. ${item.name} (${item.qty}x) - Rp ${(item.price * item.qty).toLocaleString('id-ID')}\n`;
+            });
+
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            message += `\n*Total Belanja: Rp ${totalPrice.toLocaleString('id-ID')}*\n\nMohon informasi ketersediaan dan proses selanjutnya. Terima kasih!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const phoneNumber = "6281330277210"; 
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+        }
+    </script>
+</body>
+</html>
+
+   <!-- HERO SECTION DENGAN VIDEO BACKGROUND DI VERCEL -->
+<section id="home" class="relative overflow-hidden py-28 lg:py-40 bg-gray-900 text-white min-h-[90vh] flex items-center">
+    
+    <!-- Video Background Penuh (Dioptimalkan untuk Vercel & Mobile) -->
+    <video autoplay muted loop playsinline webkit-playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover z-0">
+        <source src="animasi-usipiii.mp4" type="video/mp4">
+        Browser kamu tidak mendukung pemutaran video.
+    </video>
+
+    <!-- Lapisan Hitam Transparan (Overlay) Supaya Teks Kontras dan Terbaca -->
+    <div class="absolute inset-0 bg-black/50 z-10"></div>
+
+    <!-- Konten Teks di Atas Video -->
+    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="max-w-2xl space-y-6 text-center lg:text-left">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-500/80 text-white font-semibold text-xs sm:text-sm shadow-md backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                STITCH & SNACK
+            </div>
+            
+            <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-md">
+                Gaya Modis & Cemilan Asik dalam Satu Tempat!
+            </h1>
+            
+            <p class="text-gray-200 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 drop-shadow">
+                Selamat datang di <strong class="text-white">Shop Usipiii</strong>. Solusi pas buat kamu yang mau upgrade OOTD harian sekaligus nemenin waktu santai bareng cemilan lezat.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                <a href="#stitch" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-pink-600 hover:bg-pink-700 text-white font-bold text-center shadow-lg transition transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-shirt mr-2"></i> Explore Rajut
+                </a>
+                <a href="#snack" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white hover:bg-gray-100 text-gray-900 font-bold text-center shadow-lg transition transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-cookie-bite mr-2"></i> Cicipi Wonton & Basreng
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- DUAL PILLAR CATEGORY HIGHLIGHT -->
+    <section class="py-12 bg-white/60 border-y border-pink-100/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Stitch Card Banner (Nuansa Pink) -->
+                <div id="stitch" class="rounded-3xl bg-pink-50/60 p-8 sm:p-10 border border-pink-200 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition">
+                    <div class="absolute -right-6 -bottom-6 text-pink-200/60 text-9xl pointer-events-none">
+                        <i class="fa-solid fa-shirt"></i>
+                    </div>
+                    <div class="relative z-10 space-y-4">
+                        <span class="px-3.5 py-1.5 rounded-full bg-pink-100 text-pink-700 font-bold text-xs uppercase tracking-wide">Category: Fashion</span>
+                        <h2 class="font-heading text-3xl font-extrabold text-gray-900"> Stitch (Rajut)</h2>
+                        <p class="text-gray-600 max-w-sm">Koleksi rajut kekinian, nyaman dipakai seharian, bikin gaya kamu makin percaya diri setiap saat.</p>
+                    </div>
+                    <div class="mt-8 relative z-10">
+                        <a href="#catalog" onclick="filterCatalog('stitch')" class="inline-flex items-center font-bold text-pink-600 hover:text-pink-700 transition">
+                            Lihat Katalog rajut <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Snack Card Banner (Nuansa Hangat & Pink Aksen) -->
+                <div id="snack" class="rounded-3xl bg-pink-50/40 p-8 sm:p-10 border border-pink-200/80 flex flex-col justify-between relative overflow-hidden shadow-xs hover:shadow-md transition">
+                    <div class="absolute -right-6 -bottom-6 text-pink-200/50 text-9xl pointer-events-none">
+                        <i class="fa-solid fa-cookie-bite"></i>
+                    </div>
+                    <div class="relative z-10 space-y-4">
+                        <span class="px-3.5 py-1.5 rounded-full bg-pink-100 text-pink-700 font-bold text-xs uppercase tracking-wide">Category: Food</span>
+                        <h2 class="font-heading text-3xl font-extrabold text-gray-900">Snacks (Wonton & Basreng)</h2>
+                        <p class="text-gray-600 max-w-sm">Cemilan gurih, manis, dan siap menemani waktu santai, ngerjain tugas, atau kumpul bareng teman.</p>
+                    </div>
+                    <div class="mt-8 relative z-10">
+                        <a href="#catalog" onclick="filterCatalog('snack')" class="inline-flex items-center font-bold text-pink-600 hover:text-pink-700 transition">
+                            Lihat Menu Snack <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- CATALOG SECTION -->
+    <section id="catalog" class="py-16 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto space-y-3 mb-12">
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-pink-600">Katalog Pilihan Shop Usipiii</h2>
+                <p class="text-gray-600">Pilih produk favoritmu dari kategori Rajut, Wonton & Basreng di bawah ini.</p>
+                
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap justify-center gap-2 pt-4">
+                    <button onclick="filterCatalog('all')" id="btn-all" class="px-5 py-2 rounded-full font-bold text-sm bg-gray-900 text-white shadow-xs transition">Semua</button>
+                    <button onclick="filterCatalog('stitch')" id="btn-stitch" class="px-5 py-2 rounded-full font-bold text-sm bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition">Stitch (Baju)</button>
+                    <button onclick="filterCatalog('snack')" id="btn-snack" class="px-5 py-2 rounded-full font-bold text-sm bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition">Snack (Makanan)</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Produk 1 Rajut -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="stitch">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softBlue/50 flex items-center justify-center overflow-hidden mb-4">
+                            <!-- Foto Produk -->
+                            <img src="foto1rajut.jpeg" alt="Knitwear Basic Sweater" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Stitch</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Blossom Pattern Cardigan</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rajut premium kualitas ekspor, tidak bikin gerah.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 75.000</span>
+                        <button onclick="addToCart('Blossom Pattern Cardigan', 75000, 'Stitch')" class="p-2.5 rounded-full bg-softBlue hover:bg-blue-300 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+               <!-- Produk 2 Rajut -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="stitch">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softBlue/50 flex items-center justify-center overflow-hidden mb-4">
+                            <!-- Foto Produk 2 Rajut -->
+                            <img src="foto2rajut.jpeg" alt="Knitwear Basic Sweater" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Stitch</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Chic Collar Zipper Knitwear</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rajut premium kualitas ekspor, tidak bikin gerah.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 80.000</span>
+                        <button onclick="addToCart('Chic Collar Zipper Knitwear', 80000, 'Stitch')" class="p-2.5 rounded-full bg-softBlue hover:bg-blue-300 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+               <!-- Produk 3 Rajut -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="stitch">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softBlue/50 flex items-center justify-center overflow-hidden mb-4">
+                            <!-- Foto Produk 3 Rajut -->
+                            <img src="foto3rajut.jpeg" alt="Knitwear Basic Sweater" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Stitch</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Marine Striped Polo Knit</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rajut premium kualitas ekspor, tidak bikin gerah.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 75.000</span>
+                        <button onclick="addToCart('Marine Striped Polo Knit', 75000, 'Stitch')" class="p-2.5 rounded-full bg-softBlue hover:bg-blue-300 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produk 4 Rajut -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="stitch">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softBlue/50 flex items-center justify-center overflow-hidden mb-4">
+                            <!-- Foto Produk 4 Rajut -->
+                            <img src="foto4rajut.jpeg" alt="Knitwear Basic Sweater" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Stitch</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Vintage Bow Tie Cardigan</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rajut premium kualitas ekspor, tidak bikin gerah.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 90.000</span>
+                        <button onclick="addToCart('Vintage Bow Tie Cardigan', 90000, 'Stitch')" class="p-2.5 rounded-full bg-softBlue hover:bg-blue-300 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produk 5 Rajut -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="stitch">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softBlue/50 flex items-center justify-center overflow-hidden mb-4">
+                            <!-- Foto Produk 5 Rajut -->
+                            <img src="foto5rajut.jpeg" alt="Knitwear Basic Sweater" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Stitch</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Ruby Blossom Knit Cardigan</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rajut premium kualitas ekspor, tidak bikin gerah.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 75.000</span>
+                        <button onclick="addToCart('Ruby Blossom Knit Cardigan', 75000, 'Stitch')" class="p-2.5 rounded-full bg-softBlue hover:bg-blue-300 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produk 6 Rajut -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="stitch">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softBlue/50 flex items-center justify-center overflow-hidden mb-4">
+                            <!-- Foto Produk 6 Rajut -->
+                            <img src="foto6rajut.jpeg" alt="Knitwear Basic Sweater" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Stitch</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Ribbon Striped Knit Outer</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rajut premium kualitas ekspor, tidak bikin gerah.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 80.000</span>
+                        <button onclick="addToCart('Ribbon Striped Knit Outer', 80000, 'Stitch')" class="p-2.5 rounded-full bg-softBlue hover:bg-blue-300 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produk 7 Rajut -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="stitch">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softBlue/50 flex items-center justify-center overflow-hidden mb-4">
+                            <!-- Foto Produk 7 Rajut -->
+                            <img src="foto7rajut.jpeg" alt="Knitwear Basic Sweater" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Stitch</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Classic Grid Pocket Cardigan</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rajut premium kualitas ekspor, tidak bikin gerah.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 80.000</span>
+                        <button onclick="addToCart('Classic Grid Pocket Cardigan', 80000, 'Stitch')" class="p-2.5 rounded-full bg-softBlue hover:bg-blue-300 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+               <!-- Produk 1 Wonton -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="snack">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softYellow/70 flex items-center justify-center overflow-hidden mb-4">
+                            <img src="fotowontongoreng+kuah.png" alt="Wonton Goreng Kuah" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Snack</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Wonton Goreng + kuah</h3>
+                        <p class="text-gray-500 text-xs mt-1">Perpaduan sempurna wonton goreng renyah dengan kuah pedas gurih terpisah, lengkap dengan sayur dan jeruk limau yang menyegarkan.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 17.000</span>
+                        <button onclick="addToCart('Wonton Goreng + kuah', 17000, 'Snack')" class="p-2.5 rounded-full bg-softYellow hover:bg-yellow-200 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                 <!-- Produk 2 Wonton -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="snack">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softYellow/70 flex items-center justify-center overflow-hidden mb-4">
+                            <img src="fotowontonkering.jpeg" alt="Wonton Kering" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Snack</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Wonton Kering</h3>
+                        <p class="text-gray-500 text-xs mt-1">Sensasi wonton kering gurih dengan bumbu rempah pilihan yang mantap, teman seru buat nemenin kamu ngerjain tugas atau santai.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 13.000</span>
+                        <button onclick="addToCart('Wonton Kering', 13000, 'Snack')" class="p-2.5 rounded-full bg-softYellow hover:bg-yellow-200 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                 <!-- Produk 3 Wonton -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="snack">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softYellow/70 flex items-center justify-center overflow-hidden mb-4">
+                            <img src="fotowontongorengkering.jpeg" alt="Wonton Goreng Kering" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Snack</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Wonton Goreng Kering</h3>
+                        <p class="text-gray-500 text-xs mt-1">Wonton digoreng garing renyah berlumur bumbu pedas gurih khas Shop Usipiii, pas banget buat pencinta camilan kriuk yang nagih!</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 15.000</span>
+                        <button onclick="addToCart('Wonton Goreng Kering', 15000, 'Snack')" class="p-2.5 rounded-full bg-softYellow hover:bg-yellow-200 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                 <!-- Produk 4 Wonton -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="snack">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softYellow/70 flex items-center justify-center overflow-hidden mb-4">
+                            <img src="fotowontonrebuskuah.png" alt="Wonton Rebus Kuah" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Snack</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Wonton Rebus Kuah</h3>
+                        <p class="text-gray-500 text-xs mt-1">Wonton lembut berpadu dengan kuah pedas gurih hangat dan sayuran segar, dijamin langsung bikin ketagihan sejak suapan pertama.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 15.000</span>
+                        <button onclick="addToCart('Wonton Rebus Kuah', 15000, 'Snack')" class="p-2.5 rounded-full bg-softYellow hover:bg-yellow-200 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                 <!-- Kotak Informasi Topping -->
+<div class="mt-6 p-4 rounded-2xl bg-pink-50/60 border border-pink-200/80 shadow-xs">
+    <div class="flex items-center gap-2 mb-2">
+        <i class="fa-solid fa-fire text-pink-600"></i>
+        <h4 class="font-heading font-bold text-gray-900 text-sm sm:text-base">Pilihan Topping Tambahan:</h4>
+    </div>
+    <ul class="space-y-1.5 text-xs sm:text-sm text-gray-700">
+        <li class="flex justify-between items-center bg-white/80 px-3 py-1.5 rounded-xl border border-pink-100">
+            <span>🔥 Toping Tulang <span class="text-xs text-gray-500">(isi 3)</span></span>
+            <span class="font-bold text-pink-600">Rp 5.000</span>
+        </li>
+        <li class="flex justify-between items-center bg-white/80 px-3 py-1.5 rounded-xl border border-pink-100">
+            <span>🦴 Tulang Extra</span>
+            <span class="font-bold text-pink-600">Rp 2.000</span>
+        </li>
+    </ul>
+</div>
+
+               <!-- Produk 1 Basreng -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="snack">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softYellow/70 flex items-center justify-center overflow-hidden mb-4">
+                            <img src="fotobasrengbalado.jpeg" alt="Basreng Balado" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Snack</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Basreng Balado</h3>
+                        <p class="text-gray-500 text-xs mt-1">Rasa pedas manis gurih pas dengan sentuhan balado merah yang menggugah selera.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 15.000</span>
+                        <button onclick="addToCart('Basreng Balado', 15000, 'Snack')" class="p-2.5 rounded-full bg-softYellow hover:bg-yellow-200 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                 <!-- Produk 2 Basreng -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="snack">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softYellow/70 flex items-center justify-center overflow-hidden mb-4">
+                            <img src="fotobasrengrendang.jpeg" alt="Basreng Rendang" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Snack</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Basreng Rendang</h3>
+                        <p class="text-gray-500 text-xs mt-1">Perpaduan bumbu rempah ala rendang yang kaya dan gurih.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 15.000</span>
+                        <button onclick="addToCart('Basreng Rendang', 15000, 'Snack')" class="p-2.5 rounded-full bg-softYellow hover:bg-yellow-200 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                 <!-- Produk 3 Basreng -->
+                <div class="product-card bg-white rounded-3xl p-4 border border-gray-200/70 shadow-xs hover:shadow-md transition flex flex-col justify-between" data-category="snack">
+                    <div>
+                        <div class="relative aspect-square rounded-2xl bg-softYellow/70 flex items-center justify-center overflow-hidden mb-4">
+                            <img src="fotobasrengrumputlaut.jpeg" alt="Basreng Rumput Laut" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-2xs">Snack</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-pink-600">Basreng Rumput Laut</h3>
+                        <p class="text-gray-500 text-xs mt-1">Taburan nori gurih khas Jepang yang harum dan lezat.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="font-heading font-extrabold text-pink-600 text-lg">Rp 15.000</span>
+                        <button onclick="addToCart('Basreng Rumput Laut', 15000, 'Snack')" class="p-2.5 rounded-full bg-softYellow hover:bg-yellow-200 text-gray-900 transition shadow-2xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-16 bg-white border-t border-gray-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <span class="px-3.5 py-1.5 rounded-full bg-softPink text-gray-900 font-bold text-xs uppercase tracking-wide">Tentang Kami</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-gray-900">Kenapa Harus Belanja di Shop Usipiii?</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Kami menggabungkan dua hal favorit anak muda masa kini: fashion yang nyaman untuk tampil percaya diri (*Stitch*) dan cemilan lezat untuk menemani hari-harimu (*Snack*). Semua dikurasi dengan standar kualitas tinggi demi kepuasan pelanggan setia kami.
+                    </p>
+                   <div class="grid grid-cols-2 gap-4 pt-2">
+    <div class="p-4 rounded-2xl bg-pink-50/60 border border-pink-100">
+        <i class="fa-solid fa-truck-fast text-pink-600 text-2xl mb-2"></i>
+        <h4 class="font-bold text-gray-900">Pengiriman Cepat | Min. Order 2 Pcs</h4>
+        <p class="text-xs text-gray-500 mt-1">Aman & terpercaya sampai tujuan.</p>
+    </div>
+                        <div class="p-4 rounded-2xl bg-creamBg border border-gray-200/60">
+                            <i class="fa-solid fa-face-smile text-amber-500 text-2xl mb-2"></i>
+                            <h4 class="font-bold text-gray-900">100% Berkualitas</h4>
+                            <p class="text-xs text-gray-500 mt-1">Bahan pilihan & snack higienis.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative bg-gradient-to-tr from-softPink/40 via-softBlue/50 to-softYellow/60 rounded-3xl p-8 flex flex-col justify-center items-center text-center shadow-inner">
+                    <div class="text-6xl mb-4">🛍️✨</div>
+                    <h3 class="font-heading font-bold text-2xl text-gray-900 mb-2">Shop Usipiii Stitch & Snack</h3>
+                    <p class="text-sm text-gray-600 max-w-sm">Tempat belanja paling asik buat nemenin OOTD dan nyemil santai kamu setiap hari!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- FOOTER -->
+    <footer class="bg-pink-50/60 border-t border-pink-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div>
+                <!-- Ikon Dadah / Melambai -->
+                <div class="inline-block text-pink-600 animate-bounce mb-1 mr-2 text-lg">
+                    <i class="fa-solid fa-hand"></i>
+                </div>
+                <span class="font-heading font-bold text-xl tracking-tight text-pink-600">Shop Usipiii</span>
+                <p class="text-xs text-gray-500 mt-1">&copy; 2026 Shop Usipiii. All rights reserved. Terima kasih sudah mampir! ✨</p>
+            </div>
+            
+            <!-- Daftar Sosial Media & Username -->
+            <div class="flex flex-col sm:flex-row items-center gap-6 text-pink-600 text-sm font-semibold">
+                <!-- Instagram -->
+                <a href="https://instagram.com/usipiii_" target="_blank" class="flex items-center gap-2 hover:text-pink-700 transition bg-white/80 px-3 py-1.5 rounded-full border border-pink-100 shadow-2xs">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                    <span>@usipiii_</span>
+                </a>
+                
+                <!-- TikTok -->
+                <a href="https://tiktok.com/@rajutku29pkp" target="_blank" class="flex items-center gap-2 hover:text-pink-700 transition bg-white/80 px-3 py-1.5 rounded-full border border-pink-100 shadow-2xs">
+                    <i class="fa-brands fa-tiktok text-lg"></i>
+                    <span>@rajutku29pkp</span>
+                </a>
+                
+                <!-- WhatsApp (Ganti nomor di wa.me/ [nomor_kamu] ) -->
+                <a href="https://wa.me/6281234567890" target="_blank" class="flex items-center gap-2 hover:text-pink-700 transition bg-white/80 px-3 py-1.5 rounded-full border border-pink-100 shadow-2xs">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+   <!-- SCRIPT INTERAKSI -->
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Filter Catalog
+        function filterCategory(category) {
+            const cards = document.querySelectorAll('.product-card');
+            const btnAll = document.getElementById('btn-all');
+            const btnStitch = document.getElementById('btn-stitch');
+            const btnSnack = document.getElementById('btn-snack');
+
+            [btnAll, btnStitch, btnSnack].forEach(btn => {
+                if(btn) btn.className = "px-5 py-2 rounded-full font-bold text-sm bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition";
+            });
+
+            if(category === 'all') {
+                if(btnAll) btnAll.className = "px-5 py-2 rounded-full font-bold text-sm bg-gray-900 text-white shadow-xs transition";
+                cards.forEach(card => card.style.display = 'flex');
+            } else if(category === 'stitch') {
+                if(btnStitch) btnStitch.className = "px-5 py-2 rounded-full font-bold text-sm bg-gray-900 text-white shadow-xs transition";
+                cards.forEach(card => {
+                    card.style.display = card.getAttribute('data-category') === 'stitch' ? 'flex' : 'none';
+                });
+            } else if(category === 'snack') {
+                if(btnSnack) btnSnack.className = "px-5 py-2 rounded-full font-bold text-sm bg-gray-900 text-white shadow-xs transition";
+                cards.forEach(card => {
+                    card.style.display = card.getAttribute('data-category') === 'snack' ? 'flex' : 'none';
+                });
+            }
+        }
+
+        function filterCatalog(category) {
+            filterCategory(category);
+        }
+
+        // Shopping Cart Logic
+        let cart = [];
+
+        function openCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if(modal) modal.classList.remove('hidden');
+        }
+
+        function closeCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if(modal) modal.classList.add('hidden');
+        }
+
+        function addToCart(name, price, type) {
+            const existing = cart.find(item => item.name === name);
+            if(existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ name, price, qty: 1, type });
+            }
+            updateCartUI();
+            openCartModal();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if(badge) {
+                if(totalQty > 0) {
+                    badge.innerText = totalQty;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.innerText = '0';
+                    badge.classList.add('hidden');
+                }
+            }
+
+            if(container) {
+                if(cart.length === 0) {
+                    container.innerHTML = `<p class="text-gray-500 text-center py-8">Keranjang belanja kamu masih kosong.</p>`;
+                } else {
+                    container.innerHTML = cart.map((item, index) => `
+                        <div class="flex items-center justify-between bg-white p-3 rounded-2xl border border-gray-200 shadow-2xs mb-2">
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-900">${item.name}</h4>
+                                <p class="text-xs text-gray-500">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="changeQty(${index}, -1)" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold flex items-center justify-center">-</button>
+                                <span class="text-sm font-bold">${item.qty}</span>
+                                <button onclick="changeQty(${index}, 1)" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold flex items-center justify-center">+</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            if(totalEl) {
+                totalEl.innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            }
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if(cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        // Fungsi checkoutWhatsApp yang sudah disesuaikan dengan pilihan metode pembayaran (BCA / SeaBank)
+        function checkoutWhatsApp() {
+            if(cart.length === 0) {
+                alert('Keranjang belanja masih kosong!');
+                return;
+            }
+
+            // Ambil pilihan metode pembayaran dari radio button
+            const paymentInput = document.querySelector('input[name="paymentMethod"]:checked');
+            const selectedPayment = paymentInput ? paymentInput.value : 'whatsapp';
+
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const phoneNumber = "6281330277210"; // Nomor WhatsApp klien
+
+            let productDetails = "";
+            cart.forEach((item, i) => {
+                  productDetails += `${i+1}. ${item.name} (${item.qty}x) - Rp ${(item.price * item.qty).toLocaleString('id-ID')}\n`;
+            });
+
+            let message = "";
+
+            if(selectedPayment === 'whatsapp') {
+                message = `Halo Shop Usipiii, saya ingin memesan produk berikut:\n\n${productDetails}\n*Total Belanja: Rp ${totalPrice.toLocaleString('id-ID')}*\n\nMohon informasi selanjutnya ya. Terima kasih!`;
+            } 
+            else if(selectedPayment === 'bca') {
+                message = `Halo Shop Usipiii, saya ingin memesan produk berikut:\n\n${productDetails}\n*Total Belanja: Rp ${totalPrice.toLocaleString('id-ID')}*\n\nSaya memilih pembayaran via *Transfer BCA* (No. Rek: 8535395370 a.n. Selvi Sudianti). Berikut saya lampirkan bukti transfernya. Terima kasih!`;
+            }
+            else if(selectedPayment === 'seabank') {
+                message = `Halo Shop Usipiii, saya ingin memesan produk berikut:\n\n${productDetails}\n*Total Belanja: Rp ${totalPrice.toLocaleString('id-ID')}*\n\nSaya memilih pembayaran via *Transfer SeaBank* (No. Rek: 901174614044 a.n. Selvi Sudianti). Berikut saya lampirkan bukti transfernya. Terima kasih!`;
+            }
+
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
